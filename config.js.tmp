@@ -1,0 +1,4 @@
+module.exports = {
+  CONNECTION_URL: 'URL',
+  DB_NAME: 'NANME'
+}
