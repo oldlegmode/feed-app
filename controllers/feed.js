@@ -1,17 +1,11 @@
-const fs = require('fs');
-const path = require('path');
-
 const { validationResult } = require('express-validator');
 
 const io = require('../socket');
 const Post = require('../models/post');
 const User = require('../models/user');
 const user = require('../models/user');
+const { clearImage } = require('../utils/file');
 
-const clearImage = filePath => {
-  filePath = path.join(__dirname, '..', filePath);
-  fs.unlink(filePath, err => console.log(err));
-}
 
 exports.getPosts = async (req, res, next) => {
   const currentPage = req.query.page || 1;
