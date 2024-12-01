@@ -1,10 +1,14 @@
 const path = require('path');
+const fs = require('fs');
 
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const { graphqlHTTP } = require('express-graphql')
+const helmet = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan');
 
 const { clearImage } = require('./utils/file');
 const config = require('./config');
@@ -37,6 +41,15 @@ const fileFilter = (req, file, cb) => {
   }
   cb(null, false);
 }
+
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'access.log'),
+  { flags: 'a' }
+);
+
+app.use(helmet());
+app.use(compression());
+app.use(morgan('combined', { stream: accessLogStream }));
 
 app.use(bodyParser.json());
 app.use(multer({storage: fileStorage, fileFilter}).single('image'));
